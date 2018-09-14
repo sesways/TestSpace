@@ -19,16 +19,16 @@ import java.lang.reflect.Proxy;
  */
 public class DynamicProxyMain {
     public static void main(String[] args) {
-        //创建被代理的对象；
+        //创建被代理的接口对象；
         ImageInterface image = new Image("张三");
         //创建代理对象
         InvocationHandler handler = new ImageInvocationHandler(image);
-        //获取对象的类加载器和类型
+        //获取接口对象的类加载器和类型
         ClassLoader loader = image.getClass().getClassLoader();
         Class<?>[] cls = new Class[]{ImageInterface.class};
         //动态生成代理类
         ImageInterface o =(ImageInterface) Proxy.newProxyInstance(loader, cls, handler);
-        //代理对象生成
+        //接口对象可以像对象一样执行；
         System.out.println(o.draw());
     }
 }
