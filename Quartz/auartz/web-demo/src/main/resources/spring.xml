@@ -6,4 +6,34 @@
         <property name="name" value="zhangsan" />
         <property name="age" value="28" />
     </bean>
+
+    <bean id="executor"
+          class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="10" />
+        <property name="maxPoolSize" value="100" />
+        <property name="queueCapacity" value="500" />
+    </bean>
+
+    <!--定时任务报时-开始-->
+    <bean name="sayTime" class="com.zx.job.SayTime" />
+
+    <bean id="detailFactoryBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="sayTime" />
+        <property name="targetMethod" value="execute" />
+    </bean>
+
+    <bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="detailFactoryBean" />
+        <property name="cronExpression" value="0/1 * * * * ? *" />
+    </bean>
+
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="trigger" />
+            </list>
+        </property>
+        <property name="taskExecutor"  ref="executor" />
+    </bean>
+    <!--定时任务报时-结束-->
 </beans>
